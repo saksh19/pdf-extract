@@ -19,31 +19,31 @@ inputVariables: ["api_docs", "question"],
 });
 
 
-async function getData() {
- try {
-  const dataBuffer = fs.readFileSync('./test.pdf');
-  const data = await pdf(dataBuffer);
-  return data.text;
- } catch (error) {
-  console.error('Error while reading PDF:', error);
-  throw error; // Rethrow the error for proper handling
- }
-}
+// async function getData() {
+//  try {
+//   const dataBuffer = fs.readFileSync('./test.pdf');
+//   const data = await pdf(dataBuffer);
+//   return data.text;
+//  } catch (error) {
+//   console.error('Error while reading PDF:', error);
+//   throw error; // Rethrow the error for proper handling
+//  }
+// }
 
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 
-async function test() {
+async function test(finalData) {
  try {
-  const finalData = await getData();
+//   const finalData = await getData();
   console.log("This is final data:", finalData);
 
-
+  console.log("At the test ")
   const model = new OpenAI({ temperature: 0.1, apiKey: OPENAI_API_KEY });
 
 
-  const question1 = "Can you give me name , projects , email , internship and Database skills?";
+  const question1 = "Can you give me name , email , phone no. , project , internship , Programming skill , Frontend Development skills, Backend Development skill , Database Skills and Advance Language Processing?";
 
 
   const apiUrlPrompt = await API_URL_PROMPT_TEMPLATE.format({
@@ -52,9 +52,11 @@ async function test() {
      });
   
      const apiUrlResponse = await model.generate([apiUrlPrompt]);
-    //  console.log("API URL Response:", apiUrlResponse)
-     console.log("This is final response",apiUrlResponse.generations[0][0].text);
+    // //  console.log("API URL Response:", apiUrlResponse)
+    //  console.log("This is final response",apiUrlResponse.generations[0][0].text);
   // Further processing or actions based on OpenAI responses
+//   console.log(apiUrlResponse.generations[0][0].text);
+  return apiUrlResponse.generations[0][0].text;
 
 
  } catch (error) {
@@ -62,5 +64,4 @@ async function test() {
  }
 }
 
-
-test();
+module.exports = test

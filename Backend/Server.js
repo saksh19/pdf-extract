@@ -1,20 +1,65 @@
-import express from "express";
-import multer from "multer";
-import cors from "cors";
 
+const test = require("./openai")
+const express = require('express');
+const multer = require('multer');
+const cors = require('cors');
 const app = express();
-const port = 3000;
-const upload = multer({ dest: 'uploads/' });
+const port = 4001;
+// import pdfParse from 'pdf-parse';
+const pdfParse = require('pdf-parse')
 
 app.use(cors());
 
-app.post('/upload', upload.single('file'), (req, res) => {
-  // req.file is the name of your file in the form, here 'file'
-  // req.body will hold the text fields, if there were any
-  console.log(req.file, req.body);
-  res.send('File uploaded successfully');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.post('/upload', upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded');
+  }
+
+  // const fileName = req.body.fileName;
+  // const fileType = req.body.fileType;
+  // const filequery = req.body.filequery;
+  const fileBuffer = req.file.buffer;
+
+  // Handle the file data
+  // console.log('Received file:', {
+  //   fileName: fileName,
+  //   fileType: fileType,
+  //   fileBuffer: req.file.buffer,
+  //   filequery : filequery
+  // });
+  
+  let finalData = await fileprocess(fileBuffer);
+  // console.log(finalData)
+  let ans = await test(finalData.text)
+  console.log("Answer from openAI", ans)
+  res.send(ans);
 });
 
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
+
+async function fileprocess(fileBuffer){
+    try {
+        // const dataBuffer = fs.readFileSync(pdf.path);
+        const pdfData = await pdfParse(fileBuffer);
+        // console.log("pdfData",pdfData);
+        return pdfData;
+        // const textChunks = chunkText(pdfData.text);
+        // console.log(textChunks , "text chunks");
+      } catch (err) {
+        console.log(err);
+        return;
+      }
+}
+
+function chunkText(text, chunkSize = 500) {
+    const chunks = [];
+    for (let i = 0; i < text.length; i += chunkSize) {
+      chunks.push(text.slice(i, i + chunkSize));
+    }
+    return chunks;
+  }
