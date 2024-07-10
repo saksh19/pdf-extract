@@ -7,10 +7,11 @@ const pdf = require('pdf-parse');
 
 config();
 const API_URL_PROMPT_TEMPLATE1 = `You have been provided with the data and the question based on the data find the answer of that question
-here is your data {api_docs} and here is your question {question}
+here is your data {api_docs} and here is your question {question} Keep in mind to send answer in json and send the keys in the same format like question li
 Below is the format of giving responses :
 NAME - 
-PROJECT - ` ;
+PROJECT - 
+and try to send answer in JSON Format` ;
 
 
 const API_URL_PROMPT_TEMPLATE = new PromptTemplate({
@@ -43,7 +44,7 @@ async function test(finalData) {
   const model = new OpenAI({ temperature: 0.1, apiKey: OPENAI_API_KEY });
 
 
-  const question1 = "Can you give me name , email , phone no. , project , internship , Programming skill , Frontend Development skills, Backend Development skill , Database Skills and Advance Language Processing?";
+  const question1 = "Can you give me name , email , phone_no , project , internship , Programming_skill , Frontend_Development_skills, Backend_Development_skill , Database_Skills and Advance_Language_Processing?";
 
 
   const apiUrlPrompt = await API_URL_PROMPT_TEMPLATE.format({

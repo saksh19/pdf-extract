@@ -5,6 +5,7 @@ const BACKEND_URL = "http://localhost:4001";
 
 function Form() {
   const [file, setFile] = useState(null);
+  const [data,setData] = useState("")
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -22,6 +23,11 @@ function Form() {
         },
       });
       console.log(res.data);
+      const resultWithUppercaseKeys = {};
+Object.keys(res.data).forEach(key => {
+  resultWithUppercaseKeys[key.toUpperCase()] = res.data[key];
+});
+      setData(resultWithUppercaseKeys)
     } catch (err) {
       console.error(err);
     }
@@ -34,7 +40,9 @@ function Form() {
           <div className="flex-auto p-6">
             <form role="form text-left" onSubmit={handleSubmit}>
               <div className="mb-4">
+                <label>Name</label>
                 <input
+                  value={data.NAME}
                   aria-describedby="name-addon"
                   aria-label="Name"
                   placeholder="Name"
@@ -43,7 +51,9 @@ function Form() {
                 />
               </div>
               <div className="mb-4">
+                <label>E-Mail</label>
                 <input
+                value={data.EMAIL}
                   aria-describedby="email-addon"
                   aria-label="Email"
                   placeholder="Email"
@@ -52,7 +62,9 @@ function Form() {
                 />
               </div>
               <div className="mb-4">
+                <label>Phone NO.</label>
                 <input
+                value={data.PHONE_NO}
                   aria-describedby="phone-addon"
                   aria-label="Phone"
                   placeholder="Phone no."
@@ -61,7 +73,9 @@ function Form() {
                 />
               </div>
               <div className="mb-4">
-                <input
+                <label>Project</label>
+                <input 
+                  value={data.PROJECT}
                   aria-describedby="project-addon"
                   aria-label="Project"
                   placeholder="Project"
@@ -70,7 +84,9 @@ function Form() {
                 />
               </div>
               <div className="mb-4">
+                <label>Internship</label>
                 <input
+                value={data.INTERNSHIP}
                   aria-describedby="internship-addon"
                   aria-label="Internship"
                   placeholder="Internship"
@@ -79,7 +95,9 @@ function Form() {
                 />
               </div>
               <div className="mb-4">
+                <label>Programming Skills</label>
                 <input
+                value={data.PROGRAMMING_SKILL}
                   aria-describedby="programming-skills-addon"
                   aria-label="Programming skills"
                   placeholder="Programming skills"
@@ -88,7 +106,9 @@ function Form() {
                 />
               </div>
               <div className="mb-4">
-                <input
+                <label>Frontedend Development Skills</label>
+                <input 
+                value={data.FRONTEND_DEVELOPMENT_SKILLS }
                   aria-describedby="frontend-development-addon"
                   aria-label="Frontend Development"
                   placeholder="Frontend Development"
@@ -97,7 +117,9 @@ function Form() {
                 />
               </div>
               <div className="mb-4">
+                <label>Backend development Skills</label>
                 <input
+                value={data.BACKEND_DEVELOPMENT_SKILL}
                   aria-describedby="backend-development-addon"
                   aria-label="Backend Development"
                   placeholder="Backend Development"
@@ -106,7 +128,9 @@ function Form() {
                 />
               </div>
               <div className="mb-4">
+                <label>Database Skills</label>
                 <input
+                value={data.DATABASE_SKILLS}
                   aria-describedby="database-addon"
                   aria-label="Database"
                   placeholder="Database"
@@ -115,7 +139,9 @@ function Form() {
                 />
               </div>
               <div className="mb-4">
+                <label>Other Skills</label>
                 <input
+                value={data.ADVANCE_LANGUAGE_PROCESSING}
                   aria-describedby="advance-language-processing-addon"
                   aria-label="Advance Language Processing"
                   placeholder="Advance Language Processing"

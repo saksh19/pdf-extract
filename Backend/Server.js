@@ -6,7 +6,8 @@ const cors = require('cors');
 const app = express();
 const port = 4001;
 // import pdfParse from 'pdf-parse';
-const pdfParse = require('pdf-parse')
+const pdfParse = require('pdf-parse');
+const { lowSurrogate } = require("pdf-lib");
 
 app.use(cors());
 
@@ -34,8 +35,23 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   let finalData = await fileprocess(fileBuffer);
   // console.log(finalData)
   let ans = await test(finalData.text)
-  console.log("Answer from openAI", ans)
-  res.send(ans);
+  console.log(
+    "this is ans", ans
+  )
+  console.log("ans[0]", ans[1])
+  console.log(check);
+  if(ans.includes("{")){
+  console.log("Answer from openAI", typeof(ans))
+  const answer = JSON.parse(ans)
+  console.log("Answer hamara", typeof(answer))
+  res.send(answer);
+  }
+  else{
+   let index=ans.indexOf("N")
+
+console.log("working");
+  }
+  
 });
 
 app.listen(port, () => {
